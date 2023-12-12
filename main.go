@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"zidan/AccountServiceAppProject/controllers"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -62,6 +63,7 @@ func main() {
 	switch menu {
 	case 1:
 		fmt.Println("Welcome to Add Account (Register)!")
+		controllers.AddAccountControllers(db)
 	case 2:
 		fmt.Println("Welcome to Login!")
 	case 3:
