@@ -41,14 +41,18 @@ func LoginVerificationController(db *sql.DB) {
 	fmt.Println("Masukkan Password:")
 	fmt.Scanln(&password)
 
-	result := ReadAccountControllerr(db)
+	result := ReadAllAccountsController(db)
 
 	for _, value := range result {
 		if phone_number == value.User_phone && password == value.User_pswd {
-			fmt.Println("Silakan Menikmati Layanan Kami")
+			fmt.Println()
+			fmt.Println("** Silakan Menikmati Layanan Kami **")
+			status_login = true
 			AddLoginController(db, value.User_id)
-		} else {
+		} else if phone_number != value.User_phone && password != value.User_pswd {
 			fmt.Println("Anda belum terdaftar")
 		}
 	}
+	fmt.Println()
+	Menu(db)
 }
