@@ -13,7 +13,7 @@ func InitDB() (*sql.DB, error) {
 	// open connection
 	db, errOpen := sql.Open("mysql", os.Getenv("AppConnection"))
 	// <username>:<password>@tcp(<hostname>:<port-db>)/<db-name>
-	//db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/db_elibrary?parseTime=true")
+	// db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/db_elibrary?parseTime=true")
 	if errOpen != nil {
 		log.Fatal("open connection is failed: ", errOpen)
 		return nil, errOpen
@@ -25,7 +25,7 @@ func InitDB() (*sql.DB, error) {
 		log.Fatal("no connection available: ", errPing)
 		return nil, errPing
 	} else {
-		fmt.Println("you are succesfully connect to database")
+		fmt.Println("you are succesfully connected to database")
 		return db, nil
 	}
 }
