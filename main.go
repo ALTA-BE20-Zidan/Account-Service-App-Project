@@ -63,9 +63,10 @@ func main() {
 	switch menu {
 	case 1:
 		fmt.Println("Welcome to Add Account (Register)!")
-		controllers.AddAccountControllers(db)
+		controllers.AddAccountController(db)
 	case 2:
 		fmt.Println("Welcome to Login!")
+		controllers.LoginVerificationController(db)
 	case 3:
 		fmt.Println("Welcome to Read Account!")
 	case 4:
