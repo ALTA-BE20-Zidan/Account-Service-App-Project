@@ -47,9 +47,11 @@ func AddAccountController(db *sql.DB) {
 		fmt.Println("Succesfully insert data. Row affected ID:", hasilRows)
 	}
 	fmt.Println()
+	fmt.Println("Want to do another transaction?")
+	Menu(db)
 }
 
-func ReadAccountControllerr(db *sql.DB) []entities.Accounts {
+func ReadAllAccountsController(db *sql.DB) []entities.Accounts {
 	// *** read / select data all_accounts *** //
 	var All_accounts []entities.Accounts
 
@@ -68,4 +70,32 @@ func ReadAccountControllerr(db *sql.DB) []entities.Accounts {
 	}
 
 	return All_accounts
+}
+
+func ReadMyAccountController(db *sql.DB) {
+	// *** read / select data my account *** //
+	var my_account entities.Accounts
+
+	rowID := db.QueryRow("select accounts.user_id from accounts inner join login on accounts.user_id = login.user_id where accounts.user_id = (select user_id from login where login_id = (select max(login_id) from login)) limit 1;")
+
+	if err := rowID.Scan(&my_account.User_id); err != nil {
+		//
+	}
+
+	fmt.Println(my_account.User_id)
+
+	// // query select
+	rowFull := db.QueryRow("select * from accounts where user_id = ?", my_account.User_id)
+
+	if err := rowFull.Scan(&my_account.User_id, &my_account.Username, &my_account.User_nama, &my_account.User_phone, &my_account.User_email, &my_account.User_address, &my_account.User_balance, &my_account.User_pswd); err != nil {
+		if err == sql.ErrNoRows {
+			log.Fatal(err)
+		}
+	}
+
+	fmt.Println("This is your profile")
+	fmt.Printf("\nUser ID: %v \nUsername: %v \nDisplay Name: %v \nPhone: %v \nEmail: %v \nAddress: %v \nBalance: %v \nPassword: %v\n", my_account.User_id, my_account.Username, my_account.User_nama, my_account.User_phone, my_account.User_email, my_account.User_address, my_account.User_balance, my_account.User_pswd)
+	fmt.Println()
+	fmt.Println("Want to do another transaction?")
+	Menu(db)
 }
