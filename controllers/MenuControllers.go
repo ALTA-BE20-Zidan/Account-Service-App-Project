@@ -64,7 +64,14 @@ func Menu(db *sql.DB) {
 			DeleteMyAccountController(db)
 		}
 	case 6:
-		fmt.Println("Welcome to Top-Up!")
+		if status_login == false {
+			fmt.Println("Silakan login terlebih dahulu")
+			fmt.Println()
+			Menu(db)
+		} else if status_login == true {
+			fmt.Println("Welcome to Top-Up!")
+			AddMyBalanceByInfController(db)
+		}
 	case 7:
 		fmt.Println("Welcome to Transfer!")
 	case 8:
