@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"zidan/AccountServiceAppProject/entities"
 )
 
@@ -297,5 +298,63 @@ func DeleteMyAccountController(db *sql.DB) {
 		fmt.Println("Want to do another transaction?")
 		Menu(db)
 	}
-
 }
+
+func AddMyBalanceByInfController(db *sql.DB) {
+	var my_account entities.Accounts
+	var amount string
+	fmt.Println("Masukkan Jumlah Top-Up:")
+	fmt.Scanln(&amount)
+
+	status := FormatCheckController(db, amount)
+
+	if status == true {
+		real_amount, _ := strconv.Atoi(amount)
+
+		rowID := db.QueryRow("select accounts.user_id from accounts inner join login on accounts.user_id = login.user_id where accounts.user_id = (select user_id from login where login_id = (select max(login_id) from login)) limit 1;")
+
+		if err := rowID.Scan(&my_account.User_id); err != nil {
+			log.Fatal("cannot read user id. Please register: ", err)
+		}
+
+		fmt.Println(my_account.User_id)
+
+		// // query select
+		rowFull := db.QueryRow("select user_balance from accounts where user_id = ?", my_account.User_id)
+
+		if err := rowFull.Scan(&my_account.User_balance); err != nil {
+			if err == sql.ErrNoRows {
+				log.Fatal(err)
+			}
+		}
+
+		total_balance := my_account.User_balance + uint(real_amount)
+
+		result, errExec := db.Exec("update accounts set user_balance = ? where user_balance = ? and user_id = ?", total_balance, my_account.User_balance, my_account.User_id)
+		if errExec != nil {
+			log.Fatal("cannot update balance: ", errExec)
+		}
+
+		hasilID, errID := result.LastInsertId()
+		hasilRow, errRow := result.RowsAffected()
+		if errID != nil || errRow != nil {
+			log.Fatal("errID: ", errID)
+			log.Fatal("errRow: ", errRow)
+		} else {
+			fmt.Println("berhasil top up. Last inserted ID:", hasilID)
+			fmt.Println("berhasil top up. Row affected ID:", hasilRow)
+		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	} else if status == false {
+		fmt.Println("Format angka tidak valid")
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	}
+}
+
+// func AddMyBalanceByPhoneController(db *sql.DB) {
+
+// }
