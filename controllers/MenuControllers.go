@@ -55,7 +55,14 @@ func Menu(db *sql.DB) {
 			MenuProfil(db)
 		}
 	case 5:
-		fmt.Println("Welcome to Delete Account!")
+		if status_login == false {
+			fmt.Println("Silakan login terlebih dahulu")
+			fmt.Println()
+			Menu(db)
+		} else if status_login == true {
+			fmt.Println("Welcome to Delete Account!")
+			DeleteMyAccountController(db)
+		}
 	case 6:
 		fmt.Println("Welcome to Top-Up!")
 	case 7:
@@ -90,5 +97,4 @@ func MenuProfil(db *sql.DB) {
 	fmt.Scanln(&choose)
 
 	UpdateMyAccountController(db, choose)
-
 }

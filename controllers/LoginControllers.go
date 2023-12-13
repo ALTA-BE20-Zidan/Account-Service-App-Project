@@ -10,12 +10,12 @@ import (
 func AddLoginController(db *sql.DB, user_id uint) {
 	var newLogin entities.Login
 
-	statement, errPrepare := db.Prepare("insert into login (login_id, user_id, login_time) VALUES (?, ?, ?)")
+	statement, errPrepare := db.Prepare("insert into login (login_id, user_id) VALUES (?, ?)")
 	if errPrepare != nil {
 		log.Fatal("err prepare: ", errPrepare)
 	}
 
-	result, errExec := statement.Exec(&newLogin.Login_id, user_id, &newLogin.Login_time)
+	result, errExec := statement.Exec(&newLogin.Login_id, user_id)
 	if errExec != nil {
 		log.Fatal("insert data is failed: ", errExec)
 	}

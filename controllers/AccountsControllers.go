@@ -79,7 +79,7 @@ func ReadMyAccountController(db *sql.DB) {
 	rowID := db.QueryRow("select accounts.user_id from accounts inner join login on accounts.user_id = login.user_id where accounts.user_id = (select user_id from login where login_id = (select max(login_id) from login)) limit 1;")
 
 	if err := rowID.Scan(&my_account.User_id); err != nil {
-		//
+		log.Fatal("cannot read user id. Please register: ", err)
 	}
 
 	fmt.Println(my_account.User_id)
@@ -248,6 +248,51 @@ func UpdateMyAccountController(db *sql.DB, choose int) {
 			fmt.Println("berhasil update. Last inserted ID:", hasil1ID)
 			fmt.Println("berhasil update. Row affected ID:", hasil1Row)
 		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	}
+}
+
+func DeleteMyAccountController(db *sql.DB) {
+	var my_account entities.Accounts
+	var pilih int
+
+	fmt.Println("Anda yakin?")
+	fmt.Println("Pilih 1 jika yakin")
+	fmt.Println("Pilih 2 jika ingin membatalkan")
+	fmt.Scanln(&pilih)
+
+	switch pilih {
+	case 1:
+		rowID := db.QueryRow("select accounts.user_id from accounts inner join login on accounts.user_id = login.user_id where accounts.user_id = (select user_id from login where login_id = (select max(login_id) from login)) limit 1;")
+
+		if err := rowID.Scan(&my_account.User_id); err != nil {
+			//
+		}
+
+		fmt.Println(my_account.User_id)
+
+		// // query select
+		result, errExec := db.Exec("delete from accounts where user_id = ?", my_account.User_id)
+		if errExec != nil {
+			log.Fatal("cannot delete data: ", errExec)
+		}
+
+		hasilID, errID := result.LastInsertId()
+		hasilRow, errRow := result.RowsAffected()
+		if errID != nil || errRow != nil {
+			log.Fatal("errID: ", errID)
+			log.Fatal("errRow: ", errRow)
+		} else {
+			fmt.Println("berhasil delete. Last inserted ID:", hasilID)
+			fmt.Println("berhasil delete. Row affected ID:", hasilRow)
+		}
+
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	case 2:
 		fmt.Println()
 		fmt.Println("Want to do another transaction?")
 		Menu(db)
