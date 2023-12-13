@@ -101,6 +101,25 @@ func ReadMyAccountController(db *sql.DB) {
 	Menu(db)
 }
 
+func ReadOtherAccountsController(db *sql.DB) {
+	// *** read / select data my account *** //
+	var my_account entities.Accounts
+	var phone string
+	fmt.Println("Masukkan No. Telp yang ingin Anda lihat Profilnya:")
+	fmt.Scanln(&phone)
+
+	row := db.QueryRow("select user_nama, user_address, user_balance from accounts where user_phone = ?", phone)
+	if err := row.Scan(&my_account.User_nama, &my_account.User_address, &my_account.User_balance); err != nil {
+		log.Fatal("cannot read data: ", err)
+	}
+
+	fmt.Println("Ini adalah profil yang Anda cari:")
+	fmt.Printf("\nDisplay Name: %v \nAlamat: %v \nSaldo: %v\n", my_account.User_nama, my_account.User_address, my_account.User_balance)
+	fmt.Println()
+	fmt.Println("Want to do another transaction?")
+	Menu(db)
+}
+
 func UpdateMyAccountController(db *sql.DB, choose int) {
 	// *** coba update *** //
 	var profil entities.Accounts
