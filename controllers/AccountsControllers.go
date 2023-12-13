@@ -99,3 +99,158 @@ func ReadMyAccountController(db *sql.DB) {
 	fmt.Println("Want to do another transaction?")
 	Menu(db)
 }
+
+func UpdateMyAccountController(db *sql.DB, choose int) {
+	// *** coba update *** //
+	var profil entities.Accounts
+	var old_username string
+	var old_name string
+	var old_phone string
+	var old_email string
+	var old_address string
+	var old_pswd string
+
+	switch choose {
+	case 1:
+		fmt.Println("Masukkan Username Baru Anda:")
+		fmt.Scanln(&profil.Username)
+		fmt.Println("Masukkan Username Lama Anda:")
+		fmt.Scanln(&old_username)
+
+		result1, err := db.Exec("UPDATE accounts SET username = ? WHERE username = ?", profil.Username, old_username)
+		if err != nil {
+			log.Fatal("cannot update data: ", err)
+		}
+
+		hasil1ID, err := result1.LastInsertId()
+		hasil1Row, err := result1.RowsAffected()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("berhasil update. Last inserted ID:", hasil1ID)
+			fmt.Println("berhasil update. Row affected ID:", hasil1Row)
+		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	case 2:
+		fmt.Println("Masukkan Username Anda:")
+		fmt.Scanln(&profil.Username)
+		fmt.Println("Masukkan Nama Baru Anda:")
+		fmt.Scanln(&profil.User_nama)
+		fmt.Println("Masukkan Nama Lama Anda:")
+		fmt.Scanln(&old_name)
+
+		result1, err := db.Exec("UPDATE accounts SET user_nama = ? WHERE user_nama = ? and username = ?", profil.User_nama, old_name, profil.Username)
+		if err != nil {
+			log.Fatal("cannot update data: ", err)
+		}
+
+		hasil1ID, err := result1.LastInsertId()
+		hasil1Row, err := result1.RowsAffected()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("berhasil update. Last inserted ID:", hasil1ID)
+			fmt.Println("berhasil update. Row affected ID:", hasil1Row)
+		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	case 3:
+		fmt.Println("Masukkan No Telepon Baru Anda:")
+		fmt.Scanln(&profil.User_phone)
+		fmt.Println("Masukkan No Telepon Lama Anda:")
+		fmt.Scanln(&old_phone)
+
+		result1, err := db.Exec("UPDATE accounts SET user_phone = ? WHERE user_phone = ?", profil.User_phone, old_phone)
+		if err != nil {
+			log.Fatal("cannot update data: ", err)
+		}
+
+		hasil1ID, err := result1.LastInsertId()
+		hasil1Row, err := result1.RowsAffected()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("berhasil update. Last inserted ID:", hasil1ID)
+			fmt.Println("berhasil update. Row affected ID:", hasil1Row)
+		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	case 4:
+		fmt.Println("Masukkan Username Anda:")
+		fmt.Scanln(&profil.Username)
+		fmt.Println("Masukkan Email Baru Anda:")
+		fmt.Scanln(&profil.User_email)
+		fmt.Println("Masukkan Email Lama Anda:")
+		fmt.Scanln(&old_email)
+
+		result1, err := db.Exec("UPDATE accounts SET user_email = ? WHERE user_email = ? and username = ?", profil.User_email, old_email, profil.Username)
+		if err != nil {
+			log.Fatal("cannot update data: ", err)
+		}
+
+		hasil1ID, err := result1.LastInsertId()
+		hasil1Row, err := result1.RowsAffected()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("berhasil update. Last inserted ID:", hasil1ID)
+			fmt.Println("berhasil update. Row affected ID:", hasil1Row)
+		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	case 5:
+		fmt.Println("Masukkan Username Anda:")
+		fmt.Scanln(&profil.Username)
+		fmt.Println("Masukkan Alamat Baru Anda:")
+		fmt.Scanln(&profil.User_address)
+		fmt.Println("Masukkan Alamat Lama Anda:")
+		fmt.Scanln(&old_address)
+
+		result1, err := db.Exec("UPDATE accounts SET user_address = ? WHERE user_address = ? and username = ?", profil.User_address, old_address, profil.Username)
+		if err != nil {
+			log.Fatal("cannot update data: ", err)
+		}
+
+		hasil1ID, err := result1.LastInsertId()
+		hasil1Row, err := result1.RowsAffected()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("berhasil update. Last inserted ID:", hasil1ID)
+			fmt.Println("berhasil update. Row affected ID:", hasil1Row)
+		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	case 6:
+		fmt.Println("Masukkan Username Anda:")
+		fmt.Scanln(&profil.Username)
+		fmt.Println("Masukkan Password Baru Anda:")
+		fmt.Scanln(&profil.User_pswd)
+		fmt.Println("Masukkan Password Lama Anda:")
+		fmt.Scanln(&old_pswd)
+
+		result1, err := db.Exec("UPDATE accounts SET user_pswd = ? WHERE user_pswd = ? and username = ?", profil.User_pswd, old_pswd, profil.Username)
+		if err != nil {
+			log.Fatal("cannot update data: ", err)
+		}
+
+		hasil1ID, err := result1.LastInsertId()
+		hasil1Row, err := result1.RowsAffected()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("berhasil update. Last inserted ID:", hasil1ID)
+			fmt.Println("berhasil update. Row affected ID:", hasil1Row)
+		}
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
+	}
+
+}
