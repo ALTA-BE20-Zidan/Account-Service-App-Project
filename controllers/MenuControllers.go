@@ -75,7 +75,14 @@ func Menu(db *sql.DB) {
 	case 7:
 		fmt.Println("Welcome to Transfer!")
 	case 8:
-		fmt.Println("Welcome to History Top-Up!")
+		if status_login == false {
+			fmt.Println("Silakan login terlebih dahulu")
+			fmt.Println()
+			Menu(db)
+		} else if status_login == true {
+			fmt.Println("Welcome to History Top-Up!")
+			ReadHistoryTopUpController(db)
+		}
 	case 9:
 		fmt.Println("Welcome to History Transfer!")
 	case 10:
