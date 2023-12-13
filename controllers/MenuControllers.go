@@ -46,7 +46,14 @@ func Menu(db *sql.DB) {
 			ReadMyAccountController(db)
 		}
 	case 4:
-		fmt.Println("Welcome to Update Account!")
+		if status_login == false {
+			fmt.Println("Silakan login terlebih dahulu")
+			fmt.Println()
+			Menu(db)
+		} else if status_login == true {
+			fmt.Println("Welcome to Update Account!")
+			MenuProfil(db)
+		}
 	case 5:
 		fmt.Println("Welcome to Delete Account!")
 	case 6:
@@ -66,4 +73,22 @@ func Menu(db *sql.DB) {
 	default:
 		fmt.Println("Menu tidak tersedia")
 	}
+}
+
+func MenuProfil(db *sql.DB) {
+	fmt.Println("Silakan pilih data yang akan anda update:")
+	fmt.Println("1. Username")
+	fmt.Println("2. Display Name")
+	fmt.Println("3. Phone")
+	fmt.Println("4. Email")
+	fmt.Println("5. Address")
+	fmt.Println("6. Password")
+
+	fmt.Println("\nChoose Your Menu:")
+
+	var choose int
+	fmt.Scanln(&choose)
+
+	UpdateMyAccountController(db, choose)
+
 }
