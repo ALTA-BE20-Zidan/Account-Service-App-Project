@@ -87,6 +87,7 @@ func Menu(db *sql.DB) {
 		fmt.Println("Welcome to History Transfer!")
 	case 10:
 		fmt.Println("Welcome to Read User's Profile")
+		ReadOtherAccountsController(db)
 	case 0:
 		fmt.Println("Terima kasih telah bertransaksi")
 		os.Exit(0)
