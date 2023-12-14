@@ -73,7 +73,14 @@ func Menu(db *sql.DB) {
 			AddMyBalanceByInfController(db)
 		}
 	case 7:
-		fmt.Println("Welcome to Transfer!")
+		if status_login == false {
+			fmt.Println("Silakan login terlebih dahulu")
+			fmt.Println()
+			Menu(db)
+		} else if status_login == true {
+			fmt.Println("Welcome to Transfer!")
+			DoTransferController(db)
+		}
 	case 8:
 		if status_login == false {
 			fmt.Println("Silakan login terlebih dahulu")
