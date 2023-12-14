@@ -20,7 +20,7 @@ func FormatCheckController(db *sql.DB, amount string) bool {
 	return true
 }
 
-func AddHistoryController(db *sql.DB, user_id uint, amount uint) {
+func AddHistoryTopUpController(db *sql.DB, user_id uint, amount uint) {
 	var newTopUp entities.TopUps
 
 	statement, errPrepare := db.Prepare("insert into topups (topup_id, user_id, topup_amount) VALUES (?, ?, ?)")
@@ -44,6 +44,23 @@ func AddHistoryController(db *sql.DB, user_id uint, amount uint) {
 func ReadHistoryTopUpController(db *sql.DB) {
 	var allHistory []entities.TopUps
 	var rowTopUp entities.TopUps
+	var username string
+
+	fmt.Println("Masukkan username anda:")
+	fmt.Scanln(&username)
+
+	rowID := db.QueryRow("select user_id from accounts where username = ?", username)
+	if err := rowID.Scan(&rowTopUp.User_id); err != nil {
+		if err == sql.ErrNoRows {
+			//return member, fmt.Errorf("member dengan ID %d tidak ditemukan", id)
+		}
+		//return member, fmt.Errorf("gagal membaca data member: %v", err)
+	}
+
+	rowFull, errQuery := db.Query("select topup_id, topup_amount, topup_time from topups where user_id = ?", rowTopUp.User_id)
+	if errQuery != nil {
+		log.Fatal("cannot do select: ", errQuery)
+	}
 
 	// row := db.QueryRow("select accounts.user_id from accounts inner join topups on accounts.user_id = topups.user_id where accounts.user_id = (select user_id from topups where topup_id = (select max(topup_id) from topups)) limit 1")
 	// if err := row.Scan(&rowTopUp.User_id); err != nil {
@@ -52,10 +69,10 @@ func ReadHistoryTopUpController(db *sql.DB) {
 
 	// fmt.Println("user id: ", rowTopUp.User_id)
 
-	rowFull, errQuery := db.Query("select topups.topup_id , topups.topup_amount, topups.topup_time from accounts inner join topups on accounts.user_id = topups.user_id where accounts.user_id = (select user_id from topups where topup_id = (select max(topup_id) from topups));")
-	if errQuery != nil {
-		log.Fatal("cannot do select: ", errQuery)
-	}
+	// rowFull, errQuery := db.Query("select topups.topup_id , topups.topup_amount, topups.topup_time from accounts inner join topups on accounts.user_id = topups.user_id where accounts.user_id = (select user_id from topups where topup_id = (select max(topup_id) from topups));")
+	// if errQuery != nil {
+	// 	log.Fatal("cannot do select: ", errQuery)
+	// }
 
 	for rowFull.Next() {
 		errScan := rowFull.Scan(&rowTopUp.Topup_id, &rowTopUp.Topup_amount, &rowTopUp.Topup_time)

@@ -357,7 +357,7 @@ func AddMyBalanceByInfController(db *sql.DB) {
 			log.Fatal("cannot update balance: ", errExec)
 		}
 
-		AddHistoryController(db, my_account.User_id, uint(real_amount))
+		AddHistoryTopUpController(db, my_account.User_id, uint(real_amount))
 
 		hasilID, errID := result.LastInsertId()
 		hasilRow, errRow := result.RowsAffected()
