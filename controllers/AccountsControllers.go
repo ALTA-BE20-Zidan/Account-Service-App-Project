@@ -110,7 +110,10 @@ func ReadOtherAccountsController(db *sql.DB) {
 
 	row := db.QueryRow("select user_nama, user_address, user_balance from accounts where user_phone = ?", phone)
 	if err := row.Scan(&my_account.User_nama, &my_account.User_address, &my_account.User_balance); err != nil {
-		log.Fatal("cannot read data: ", err)
+		fmt.Println("no user's profile found: ", err)
+		fmt.Println()
+		fmt.Println("Want to do another transaction?")
+		Menu(db)
 	}
 
 	fmt.Println("Ini adalah profil yang Anda cari:")
