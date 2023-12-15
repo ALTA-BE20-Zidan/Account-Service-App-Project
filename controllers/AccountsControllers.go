@@ -116,8 +116,8 @@ func ReadOtherAccountsController(db *sql.DB) {
 		Menu(db)
 	}
 
-	fmt.Println("Ini adalah profil yang Anda cari:")
-	fmt.Printf("\nDisplay Name: %v \nAlamat: %v \nSaldo: %v\n", my_account.User_nama, my_account.User_address, my_account.User_balance)
+	fmt.Println("\nIni adalah profil yang Anda cari:")
+	fmt.Printf("Display Name: %v \nAlamat: %v \nSaldo: %v\n", my_account.User_nama, my_account.User_address, my_account.User_balance)
 	fmt.Println()
 	fmt.Println("Want to do another transaction?")
 	Menu(db)
