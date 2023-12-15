@@ -32,10 +32,16 @@ func Menu(db *sql.DB) {
 	case 1:
 		fmt.Println("Welcome to Add Account (Register)!")
 		AddAccountController(db)
-		status_login = true
+		//status_login = true
 	case 2:
-		fmt.Println("Welcome to Login!")
-		LoginVerificationController(db)
+		if status_login == true {
+			fmt.Println("Anda sudah login")
+			fmt.Println()
+			Menu(db)
+		} else if status_login == false {
+			fmt.Println("Welcome to Login!")
+			LoginVerificationController(db)
+		}
 	case 3:
 		if status_login == false {
 			fmt.Println("Silakan login terlebih dahulu")
