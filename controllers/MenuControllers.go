@@ -106,8 +106,14 @@ func Menu(db *sql.DB) {
 			ReadHistoryTransferController(db)
 		}
 	case 10:
-		fmt.Println("Welcome to Read User's Profile")
-		ReadOtherAccountsController(db)
+		if status_login == false {
+			fmt.Println("Silakan login terlebih dahulu")
+			fmt.Println()
+			Menu(db)
+		} else if status_login == true {
+			fmt.Println("Welcome to Read User's Profile")
+			ReadOtherAccountsController(db)
+		}
 	case 0:
 		fmt.Println("Terima kasih telah bertransaksi")
 		os.Exit(0)
