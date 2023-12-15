@@ -103,28 +103,29 @@ func AddHistoryTransferController(db *sql.DB, id_sdr uint, id_rcv uint, amount u
 }
 
 func ReadHistoryTransferController(db *sql.DB) {
-	var allHistory []entities.Transfers
-	var rowTransfer entities.Transfers
+	var allHistory []entities.TransfersJoin
+	var rowTransfer entities.TransfersJoin
 	var username string
+	var id_sdr uint
 
 	fmt.Println("Masukkan username anda:")
 	fmt.Scanln(&username)
 
 	rowID := db.QueryRow("select user_id from accounts where username = ?", username)
-	if err := rowID.Scan(&rowTransfer.User_id_sdr); err != nil {
+	if err := rowID.Scan(&id_sdr); err != nil {
 		if err == sql.ErrNoRows {
 			//return member, fmt.Errorf("member dengan ID %d tidak ditemukan", id)
 		}
 		//return member, fmt.Errorf("gagal membaca data member: %v", err)
 	}
 
-	rowFull, errQuery := db.Query("select transfer_id, user_id_rcv, transfer_amount, transfer_time from transfers where user_id_sdr = ?", rowTransfer.User_id_sdr)
+	rowFull, errQuery := db.Query("select transfers.transfer_id, accounts.username, accounts.user_phone, transfers.transfer_amount, transfers.transfer_time from transfers inner join accounts on accounts.user_id = transfers.user_id_rcv where user_id_sdr = ?", id_sdr)
 	if errQuery != nil {
 		log.Fatal("cannot do select: ", errQuery)
 	}
 
 	for rowFull.Next() {
-		errScan := rowFull.Scan(&rowTransfer.Transfer_id, &rowTransfer.User_id_rcv, &rowTransfer.Transfer_amount, &rowTransfer.Transfer_time)
+		errScan := rowFull.Scan(&rowTransfer.Transfer_id, &rowTransfer.Username_rcv, &rowTransfer.Phone_rcv, &rowTransfer.Transfer_amount, &rowTransfer.Transfer_time)
 		if errScan != nil {
 			log.Fatal("cannot do scan from row: ", errScan.Error())
 		}
@@ -133,7 +134,7 @@ func ReadHistoryTransferController(db *sql.DB) {
 
 	fmt.Println("This is your Top-up History")
 	for _, value := range allHistory {
-		fmt.Printf("\nTransfer ID: %v \nTransfer Amount: %v \nTransfer Time: %v\n", value.Transfer_id, value.Transfer_amount, value.Transfer_time)
+		fmt.Printf("\nTransfer ID: %v \nUsername penerima: %v \nNo. Telp Penerima: %v \nTransfer Amount: %v \nTransfer Time: %v\n", value.Transfer_id, value.Username_rcv, value.Phone_rcv, value.Transfer_amount, value.Transfer_time)
 		fmt.Println()
 	}
 	fmt.Println()
